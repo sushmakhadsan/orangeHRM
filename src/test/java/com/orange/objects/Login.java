@@ -1,49 +1,67 @@
 package com.orange.objects;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 public class Login {
 
-	/* class level parameter */
-	private WebDriver driver;
-
 	/* initializing class parameter through constructor */
 	public Login(WebDriver driver) {
 		super();
-		this.driver = driver;
+		PageFactory.initElements(driver, this);
 	}
 
-	/* Parameter declaration */
-	By userNameXPath = By.xpath("//input[@placeholder='Username']");
-	By passwordXPath = By.xpath("//input[@placeholder='Password']");
-	By loginbtnXPath = By.xpath("//button[normalize-space()='Login']");
-	By dashboardXPath = By.xpath("//h6[normalize-space()='Dashboard']");
-	By logoutdropdwnXPath = By.xpath("//span[@class='oxd-userdropdown-tab']");
-	By logoutXPath = By.xpath("//a[normalize-space()='Logout']");
-	By forgotpwdXPath = By.xpath("//p[@class='oxd-text oxd-text--p orangehrm-login-forgot-header']");
-	By resetunameXPath = By.xpath("//input[@placeholder='Username']");
-	By resetpassbtnXPath = By.xpath("//button[normalize-space()='Reset Password']");
-	By resetlinkmsgXPath = By.xpath("//h6[@class='oxd-text oxd-text--h6 orangehrm-forgot-password-title']");
+	/* Xpath variable declaration */
+	@FindBy(xpath = "//input[@placeholder='Username']")
+	public WebElement userNameXPath;
+
+	@FindBy(xpath = "//input[@placeholder='Password']")
+	public WebElement passwordXPath;
+
+	@FindBy(xpath = "//button[normalize-space()='Login']")
+	public WebElement loginbtnXPath;
+
+	@FindBy(xpath = "//h6[normalize-space()='Dashboard']")
+	public WebElement dashboardXPath;
+
+	@FindBy(xpath = "//span[@class='oxd-userdropdown-tab']")
+	public WebElement logoutdropdwnXPath;
+
+	@FindBy(xpath = "//a[normalize-space()='Logout']")
+	public WebElement logoutXPath;
+	@FindBy(xpath = "//p[@class='oxd-text oxd-text--p orangehrm-login-forgot-header']")
+	public WebElement forgotpwdXPath;
+
+	@FindBy(xpath = "//input[@placeholder='Username']")
+	public WebElement resetunameXPath;
+
+	@FindBy(xpath = "//button[normalize-space()='Reset Password']")
+	public WebElement resetpassbtnXPath;
+
+	@FindBy(xpath = "//h6[@class='oxd-text oxd-text--h6 orangehrm-forgot-password-title']")
+	public WebElement resetlinkmsgXPath;
 
 	/* pass userName and password and click login button */
 	public void loginHRM(String userName, String password) {
 		try {
-			driver.findElement(userNameXPath).sendKeys(userName);
+			userNameXPath.sendKeys(userName);
 			Thread.sleep(1000);
-			driver.findElement(passwordXPath).sendKeys(password);
+			passwordXPath.sendKeys(password);
 			Thread.sleep(1000);
-			driver.findElement(loginbtnXPath).click();
+			loginbtnXPath.click();
 		} catch (Exception e) {
 			System.out.println("Exception Cought" + e.getMessage());
 		}
 	}
 
+	/* Verify if user login successfully */
 	public void verifyloginHRM() {
 		try {
-			driver.findElement(dashboardXPath).getText();
-			Assert.assertEquals(driver.findElement(dashboardXPath).getText(), "Dashboard");
+			dashboardXPath.getText();
+			Assert.assertEquals(dashboardXPath.getText(), "Dashboard");
 		} catch (Exception e) {
 			System.out.println("Exception Cought" + e.getMessage());
 		}
@@ -52,17 +70,18 @@ public class Login {
 
 	/* forget Password input: userName */
 	public void forgotPassword(String userName) {
-		driver.findElement(forgotpwdXPath).click();
-		driver.findElement(resetunameXPath).sendKeys(userName);
-		driver.findElement(resetpassbtnXPath).click();
-		driver.findElement(resetlinkmsgXPath).getText();
-		Assert.assertEquals(driver.findElement(resetlinkmsgXPath).getText(), "Reset Password link sent successfully");
+		forgotpwdXPath.click();
+		resetunameXPath.sendKeys(userName);
+		resetpassbtnXPath.click();
+		resetlinkmsgXPath.getText();
+		Assert.assertEquals(resetlinkmsgXPath.getText(), "Reset Password link sent successfully");
 
 	}
 
 	public void logout() {
-		driver.findElement(logoutdropdwnXPath).click();
-		driver.findElement(logoutXPath).click();
+		logoutdropdwnXPath.click();
+		logoutXPath.click();
 
 	}
+
 }
