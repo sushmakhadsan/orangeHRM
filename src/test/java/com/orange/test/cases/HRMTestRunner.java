@@ -2,21 +2,31 @@ package com.orange.test.cases;
 
 import java.time.Duration;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.orange.objects.AddEmployee;
-import com.orange.objects.Login;
+import com.orange.objects.DeleteEmployee;
+import com.orange.objects.LoginPage;
+import com.orange.objects.PrintEmployeeList;
+import com.orange.objects.UploadFile;
+import com.orange.objects.UploadImage;
 
 /*Common runner class*/
 public class HRMTestRunner {
 	/* declare variables */
 	private WebDriver driver;
-	private Login login;
-	private AddEmployee addemp;
+	private LoginPage login;
+	private AddEmployee addEmployee;
+	private UploadFile uploadFile;
+	private UploadImage uploadImage;
+	private DeleteEmployee deleteEmployee;
+	private PrintEmployeeList printEmployeeList;
 
 	public String baseUrl = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
 	/* declare constant */
@@ -34,23 +44,23 @@ public class HRMTestRunner {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.get(baseUrl);
 
-		login = new Login(driver);
-		addemp = new AddEmployee(driver);
+		login = new LoginPage(driver);
+		addEmployee = new AddEmployee(driver);
+		uploadFile = new UploadFile(driver);
+		uploadImage = new UploadImage(driver);
+		deleteEmployee = new DeleteEmployee(driver);
+		printEmployeeList = new PrintEmployeeList(driver);
 	}
 
-	@Test(priority = 0)
+	@Test(priority = 1)
 	public void loginTest() throws Exception {
 		/* Instance created for Login class by passing driver object */
 		Thread.sleep(5000);
 		login.loginHRM(userName, password);
+		Assert.assertEquals(driver.getTitle(), "OrangeHRM");
 	}
 
-	@Test(priority = 1, enabled = false)
-	public void verifyloginTest() {
-		login.verifyloginHRM();
-	}
-
-	@Test(priority = 2, enabled = false)
+	@Test(priority = 2)
 	public void logoutTest() {
 		login.logout();
 
@@ -62,21 +72,68 @@ public class HRMTestRunner {
 		login.forgotPassword(userName);
 	}
 
-	@Test(priority = 1)
+	@Test(priority = 4)
 	public void addemployeeTest() throws Exception {
-		addemp.addemployee("devivisvakumar12", "vishva12", "kumar12");
-
-	}
-
-	@Test(priority = 2)
-	public void verifyaddemployeeTest() throws Exception {
-		addemp.verifyaddemp();
+		loginTest();
+		addEmployee.addemployee("devish", "kumar");
+		logoutTest();
 
 	}
 
 	@Test(priority = 2, enabled = false)
 	public void addempwithloginTest() throws Exception {
-		addemp.addemployee("devivisvakumar", "vishva", "kumar");
+		addEmployee.addemployee("devish", "kumar");
+
+	}
+
+	@Test(priority = 5)
+	public void searchempbynameTest() throws Exception {
+		loginTest();
+		addEmployee.searchempbyname("devish");
+		JavascriptExecutor exector = (JavascriptExecutor) driver;
+		exector.executeScript("window.scrollBy(0," + 500 + ")");
+		logoutTest();
+	}
+
+	@Test(priority = 6)
+	public void searchempbyidTest() throws Exception {
+		loginTest();
+		addEmployee.searchempbyid("0370");
+		JavascriptExecutor exector = (JavascriptExecutor) driver;
+		exector.executeScript("window.scrollBy(0," + 500 + ")");
+		logoutTest();
+	}
+
+	@Test(priority = 7)
+	public void uploadfileTest() throws Exception {
+		loginTest();
+		uploadFile.uploadfile();
+		logoutTest();
+	}
+
+	@Test(priority = 8)
+	public void uploadimageTest() throws Exception {
+		loginTest();
+		uploadImage.uploadimage("suvish", "sharma");
+		logoutTest();
+	}
+
+	@Test(priority = 9)
+	public void deleteEmployeeTest() throws Exception {
+		loginTest();
+		deleteEmployee.deleteEmplyee("devish");
+		logoutTest();
+	}
+
+	@Test(priority = 10)
+	public void printEmplyeeTest() throws Exception {
+		loginTest();
+		printEmployeeList.printemplist();
+		logoutTest();
+	}
+
+	@Test(priority = 1, enabled = false)
+	public void applyLeaveTest() {
 
 	}
 

@@ -21,9 +21,6 @@ public class AddEmployee {
 	@FindBy(xpath = "//input[@placeholder='First Name']")
 	public WebElement EmpFirstName;
 
-	@FindBy(xpath = "//input[@placeholder='Middle Name']")
-	public WebElement EmpMidName;
-
 	@FindBy(xpath = "//input[@placeholder='Last Name']")
 	public WebElement EmpLastName;
 
@@ -51,19 +48,37 @@ public class AddEmployee {
 	@FindBy(xpath = "//h6[normalize-space()='Personal Details']")
 	public WebElement PersonalDetailsPage;
 
-	public void addemployee(String fname, String mname, String lname) throws Exception {
+	@FindBy(xpath = "//a[normalize-space()='Employee List']")
+	public WebElement EmployeeList;
+
+	@FindBy(xpath = "(//input[@placeholder='Type for hints...'])[1]")
+	public WebElement EmployeeName;
+
+	@FindBy(xpath = "//button[normalize-space()='Search']")
+	public WebElement Searchemp;
+
+	@FindBy(xpath = "(//span[@class='oxd-text oxd-text--span'])[1]")
+	public WebElement Records;
+
+	@FindBy(xpath = "(//input[@class='oxd-input oxd-input--active'])[2]")
+	public WebElement EmployeeID;
+
+	@FindBy(xpath = "(//div[@role='row'])[2]//div[2]")
+	public WebElement Act_EmployeeID;
+
+	public void addemployee(String fname, String lname) throws Exception {
 		PIM.click();
 		Thread.sleep(1000);
 		AddEmployee.click();
 		Thread.sleep(1000);
 		EmpFirstName.sendKeys(fname);
 		Thread.sleep(1000);
-		EmpMidName.sendKeys(mname);
-		Thread.sleep(1000);
 		EmpLastName.sendKeys(lname);
-		Thread.sleep(1000);
-		 EmpAddSaveBtn.click();
-		 Thread.sleep(5000);
+		Thread.sleep(2000);
+		EmpAddSaveBtn.click();
+		Thread.sleep(5000);
+		String confirm_msg = PersonalDetailsPage.getText();
+		Assert.assertEquals("Personal Details", confirm_msg);
 	}
 
 	public void addempwithlogincredential(String UName, String pwd, String cpwd) throws Exception {
@@ -83,9 +98,32 @@ public class AddEmployee {
 		SaveBtn.click();
 	}
 
-	public void verifyaddemp() {
-		String confirm_msg = PersonalDetailsPage.getText();
-		Assert.assertEquals("Personal Details", confirm_msg);
+	public void searchempbyname(String EName) throws Exception {
+		PIM.click();
+		EmployeeList.click();
+		EmployeeName.sendKeys(EName);
+		Thread.sleep(2000);
+		Searchemp.click();
+
+		Thread.sleep(2000);
+		String act_msg = Records.getText();
+		Thread.sleep(2000);
+		System.out.println(act_msg);
+		Thread.sleep(2000);
+		Assert.assertTrue(act_msg.contains("Record Found"));
+		Thread.sleep(2000);
+	}
+
+	public void searchempbyid(String empid) throws Exception {
+		PIM.click();
+		EmployeeList.click();
+		EmployeeID.sendKeys(empid);
+		Searchemp.click();
+		Thread.sleep(2000);
+		String act_id = Act_EmployeeID.getText();
+		Thread.sleep(2000);
+		Assert.assertEquals(empid, act_id);
+		Thread.sleep(2000);
 	}
 
 }

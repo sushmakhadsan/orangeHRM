@@ -6,23 +6,23 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-public class Login {
+public class LoginPage {
 
 	/* initializing class parameter through constructor */
-	public Login(WebDriver driver) {
+	public LoginPage(WebDriver driver) {
 		super();
 		PageFactory.initElements(driver, this);
 	}
 
 	/* Xpath variable declaration */
 	@FindBy(xpath = "//input[@placeholder='Username']")
-	public WebElement userNameXPath;
+	public WebElement txt_username;
 
 	@FindBy(xpath = "//input[@placeholder='Password']")
-	public WebElement passwordXPath;
+	public WebElement txt_password;
 
 	@FindBy(xpath = "//button[normalize-space()='Login']")
-	public WebElement loginbtnXPath;
+	public WebElement btn_login;
 
 	@FindBy(xpath = "//h6[normalize-space()='Dashboard']")
 	public WebElement dashboardXPath;
@@ -45,27 +45,16 @@ public class Login {
 	public WebElement resetlinkmsgXPath;
 
 	/* pass userName and password and click login button */
-	public void loginHRM(String userName, String password) {
+	public void loginHRM(String user, String password) {
 		try {
-			userNameXPath.sendKeys(userName);
+			txt_username.sendKeys(user);
 			Thread.sleep(1000);
-			passwordXPath.sendKeys(password);
+			txt_password.sendKeys(password);
 			Thread.sleep(1000);
-			loginbtnXPath.click();
+			btn_login.click();
 		} catch (Exception e) {
 			System.out.println("Exception Cought" + e.getMessage());
 		}
-	}
-
-	/* Verify if user login successfully */
-	public void verifyloginHRM() {
-		try {
-			dashboardXPath.getText();
-			Assert.assertEquals(dashboardXPath.getText(), "Dashboard");
-		} catch (Exception e) {
-			System.out.println("Exception Cought" + e.getMessage());
-		}
-
 	}
 
 	/* forget Password input: userName */
